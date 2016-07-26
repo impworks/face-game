@@ -7,7 +7,7 @@
     {
         public bool IsFirstNameCorrect { get; set; }
         public bool IsLastNameCorrect { get; set; }
-        public bool IsMiddleCorrect { get; set; }
+        public bool IsMiddleNameCorrect { get; set; }
 
         public int ScoreAdded { get; set; }
     }

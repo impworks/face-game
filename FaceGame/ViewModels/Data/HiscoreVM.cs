@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FaceGame.ViewModels
+namespace FaceGame.ViewModels.Data
 {
     public class HiscoreVM
     {

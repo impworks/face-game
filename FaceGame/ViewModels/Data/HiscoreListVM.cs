@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace FaceGame.ViewModels
+﻿namespace FaceGame.ViewModels.Data
 {
     public class HiscoreListVM
     {
-        public List<HiscoreVM> Scores { get; set; }
+        public HiscoreVM[] Scores { get; set; }
     }
 }

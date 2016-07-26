@@ -1,4 +1,4 @@
-﻿namespace FaceGame.ViewModels
+﻿namespace FaceGame.ViewModels.State
 {
     /// <summary>
     /// Information about a person whose name should be guessed.
@@ -18,5 +18,21 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
+
+        /// <summary>
+        /// Returns a copy of the face definition, but with empty info.
+        /// </summary>
+        public FaceVM CreateBlankCopy()
+        {
+            return new FaceVM
+            {
+                Id = Id,
+                X = X,
+                Y = Y,
+                Width = Width,
+                Height = Height,
+                HasMiddleName = HasMiddleName
+            };
+        }
     }
 }
