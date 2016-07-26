@@ -1,0 +1,35 @@
+﻿@model FaceGame.ViewModels.HiscoreListVM
+@{
+    ViewBag.Title = "Результаты";
+}
+
+<h3>Список результатов</h3>
+
+@if (Model.Scores.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <td width="10%">#</td>
+            <td width="60%">Имя</td>
+            <td width="30%">Дата</td>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model.Scores)
+            {
+                <tr>
+                    <td>@record.Score</td>
+                    <td>@record.Name</td>
+                    <td>@record.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        Никто еще не отметился.
+    </div>
+}
