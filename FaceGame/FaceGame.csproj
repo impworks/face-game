@@ -130,13 +130,18 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\HiscoreManager.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\HiscoreListVM.cs" />
-    <Compile Include="ViewModels\HiscoreVM.cs" />
+    <Compile Include="ViewModels\Messages\IdentificationResponseVM.cs" />
+    <Compile Include="ViewModels\State\FaceVM.cs" />
+    <Compile Include="ViewModels\Data\HiscoreListVM.cs" />
+    <Compile Include="ViewModels\Data\HiscoreVM.cs" />
+    <Compile Include="ViewModels\Messages\IdentificationVM.cs" />
+    <Compile Include="ViewModels\State\StateVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\styles\bootstrap.css" />

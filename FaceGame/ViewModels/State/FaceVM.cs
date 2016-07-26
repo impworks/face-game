@@ -14,5 +14,9 @@
         public int Height { get; set; }
 
         public bool HasMiddleName { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using FaceGame.ViewModels;
-using Newtonsoft.Json;
-using FileIO = System.IO.File;
+﻿using System.Web.Mvc;
+using FaceGame.Code;
 
 namespace FaceGame.Controllers
 {
@@ -11,6 +8,13 @@ namespace FaceGame.Controllers
     /// </summary>
     public class HomeController : Controller
     {
+        public HomeController(HiscoreManager hiscoreMgr)
+        {
+            _hiscoreMgr = hiscoreMgr;
+        }
+
+        private readonly HiscoreManager _hiscoreMgr;
+
         /// <summary>
         /// Displays the main game screen.
         /// </summary>
@@ -24,22 +28,8 @@ namespace FaceGame.Controllers
         /// </summary>
         public ActionResult Hiscores()
         {
-            var scoresVm = LoadHiscores();
-            return View(scoresVm);
-        }
-
-        /// <summary>
-        /// Loads hiscores from server.
-        /// </summary>
-        private HiscoreListVM LoadHiscores()
-        {
-            var path = Server.MapPath("~/Content/hiscores.json");
-            if (!FileIO.Exists(path))
-                return new HiscoreListVM {Scores = new List<HiscoreVM>()};
-
-            var contents = FileIO.ReadAllText(path);
-            var data = JsonConvert.DeserializeObject<HiscoreListVM>(contents);
-            return data;
+            var scores = _hiscoreMgr.Hiscores;
+            return View(scores);
         }
     }
 }
