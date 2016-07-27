@@ -19,12 +19,14 @@ export default class MainComponent extends React.Component<any, IGameState> {
         return (
             <div className="content-wrapper">
                 <div className="content-header">
-                    <div className="score">
-                        Ваш счет: {this.score}
+                    <div className="score-wrapper">
+                        Ваш счет: <strong>{this.score}</strong>
                     </div>
-                    <button className="btn btn-primary" onClick={this.finishGame}>
-                        Завершить
-                    </button>
+                    <div className="finish-wrapper">
+                        <button className="btn btn-primary" onClick={this.finishGame}>
+                            Завершить
+                        </button>
+                    </div>
                 </div>
                 <img src="./Assets/images/group.jpg" />
             </div>

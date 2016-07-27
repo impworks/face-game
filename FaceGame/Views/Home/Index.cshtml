@@ -2,12 +2,17 @@
     ViewBag.Title = "Игра";
 }
 
-<div id="game-wrapper">
+<div id="game">
 </div>
 
 @section Scripts {
     <script src="@Url.Content("~/Content/scripts/app.js")" type="text/javascript"></script>
     <script type="text/javascript">
-        require(["Main"]);
+        require(["MainComponent"], function (main) {
+            ReactDOM.render(
+                React.createElement(main.default),
+                document.getElementById('game')
+            );
+        });
     </script>
 }

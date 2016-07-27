@@ -204,7 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\Source\IGameState.ts" />
-    <TypeScriptCompile Include="Scripts\Source\Main.tsx" />
     <TypeScriptCompile Include="Scripts\Source\MainComponent.tsx" />
     <TypeScriptCompile Include="Scripts\Typings\react-dom.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-global.d.ts" />
@@ -212,6 +211,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\styles\app.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
