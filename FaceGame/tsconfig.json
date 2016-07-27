@@ -1,0 +1,19 @@
+﻿{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "amd",
+    "moduleResolution": "node",
+    "outFile": "app.js"
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}

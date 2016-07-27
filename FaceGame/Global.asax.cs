@@ -11,6 +11,7 @@ namespace FaceGame
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            LightInjectConfig.Configure();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
     }

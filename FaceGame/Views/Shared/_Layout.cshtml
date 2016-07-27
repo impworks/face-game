@@ -4,13 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="@Url.Content("~/Content/styles/style.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/styles/libs.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/styles/app.css")" rel="stylesheet"/>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="@Url.Action("Index", "Home")">
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand">
                     <span class="glyphicon glyphicon-user"></span> Игра
                 </a>
             </div>
@@ -27,7 +28,7 @@
         @RenderBody()
     </div>
 
-    <script scr="@Url.Content("~/Content/scripts/libs.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/scripts/libs.js")" type="text/javascript"></script>
     @RenderSection("Scripts", false)
 </body>
 </html>
