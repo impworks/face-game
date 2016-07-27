@@ -22,7 +22,7 @@ export default class MainComponent extends React.Component<any, IGameState> {
                     <div className="score">
                         Ваш счет: {this.score}
                     </div>
-                    <button className="btn btn-primary" onClick={this.finishGame()}>
+                    <button className="btn btn-primary" onClick={this.finishGame}>
                         Завершить
                     </button>
                 </div>
