@@ -172,6 +172,7 @@
     <Content Include="gulpfile.js" />
     <Content Include="Scripts\Libs\bootstrap.js" />
     <Content Include="Scripts\Libs\jquery-1.10.2.js" />
+    <Content Include="Scripts\Libs\lodash.js" />
     <Content Include="Scripts\Libs\react-dom.js" />
     <Content Include="Scripts\Libs\react.js" />
     <Content Include="Scripts\Libs\require.js" />
@@ -201,8 +202,11 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Source\IGameState.ts" />
-    <TypeScriptCompile Include="Scripts\Source\MainComponent.tsx" />
+    <TypeScriptCompile Include="Scripts\Source\Components\FaceCpt.tsx" />
+    <TypeScriptCompile Include="Scripts\Source\Components\GameCpt.tsx" />
+    <TypeScriptCompile Include="Scripts\Source\ViewModels\IFaceState.ts" />
+    <TypeScriptCompile Include="Scripts\Source\ViewModels\IState.ts" />
+    <TypeScriptCompile Include="Scripts\Typings\lodash.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-dom.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-global.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react.d.ts" />

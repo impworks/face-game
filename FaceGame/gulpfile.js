@@ -25,6 +25,7 @@ gulp.task('lib:scripts', function () {
     return gulp.src([
             './Scripts/Libs/jquery-1.10.2.js',
             './Scripts/Libs/bootstrap.js',
+            './Scripts/Libs/lodash.js',
             './Scripts/Libs/react.js',
             './Scripts/Libs/react-dom.js',
             './Scripts/Libs/require.js'
@@ -55,7 +56,7 @@ gulp.task('app:less', function () {
 
 gulp.task('app:scripts', function () {
     return gulp.src([
-            './Scripts/Source/MainComponent.tsx'
+            './Scripts/Source/Components/GameCpt.tsx'
     ])
         .pipe(tsc(tsProject))
         .pipe(gulp.dest('./Content/scripts'));
