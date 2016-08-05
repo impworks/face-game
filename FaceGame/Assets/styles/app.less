@@ -24,21 +24,25 @@
         }
     }
 
-    img {
-        width: 100%;
-        max-width: 800px;
-    }
-
-    .face {
-        display: block;
+    .game-wrapper {
         position: relative;
-        
-        border: #FF0000 1px solid;
-        background: transparent;
-        cursor: pointer;
 
-        &.hovered {
-            background-color: rgba(255, 0, 0, 0.3);
+        img {
+            width: 100%;
+            max-width: 800px;
+        }
+
+
+        .face {
+            position: absolute;
+        
+            border: 1px #FF0000 solid;
+            background: transparent;
+            cursor: pointer;
+
+            &.hovered {
+                background-color: rgba(255, 0, 0, 0.3);
+            }
         }
     }
 }

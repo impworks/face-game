@@ -28,6 +28,7 @@ gulp.task('lib:scripts', function () {
             './Scripts/Libs/lodash.js',
             './Scripts/Libs/react.js',
             './Scripts/Libs/react-dom.js',
+            './Scripts/Libs/react-bootstrap.js',
             './Scripts/Libs/require.js'
     ])
         .pipe(concat('libs.js'))

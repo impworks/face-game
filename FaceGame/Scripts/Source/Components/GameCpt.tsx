@@ -1,4 +1,5 @@
 ﻿/// <reference path="../../Typings/react-global.d.ts" />
+/// <reference path="../../Typings/react-bootstrap.d.ts" />
 /// <reference path="../ViewModels/IState.ts"/>
 
 import FaceCpt from "./FaceCpt";
@@ -27,13 +28,15 @@ export default class GameCpt extends React.Component<any, IState> {
                         Ваш счет: <strong>{this.state.score}</strong>
                     </div>
                     <div className="finish-wrapper">
-                        <button className="btn btn-primary" onClick={this.finishGame}>
+                        <ReactBootstrap.Button className="btn btn-primary" onClick={this.finishGame}>
                             Завершить
-                        </button>
+                        </ReactBootstrap.Button>
                     </div>
                 </div>
-                <img src="./Assets/images/group.jpg" />
-                {childFaces}
+                <div className="game-wrapper">
+                    <img src="./Assets/images/group.jpg" />
+                    {childFaces}
+                </div>
             </div>
         );
     }
