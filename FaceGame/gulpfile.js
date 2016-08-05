@@ -32,14 +32,14 @@ gulp.task('lib:scripts', function () {
             './Scripts/Libs/require.js'
     ])
         .pipe(concat('libs.js'))
-        .pipe(gulp.dest('./Content/scripts'));
+        .pipe(gulp.dest('./Content/scripts/'));
 });
 
 gulp.task('lib:fonts', function() {
     return gulp.src([
             './Assets/fonts/*.*'
         ])
-        .pipe(gulp.dest('./Content/fonts'));
+        .pipe(gulp.dest('./Content/fonts/'));
 });
 
 // -----------------------------
@@ -52,7 +52,7 @@ gulp.task('app:less', function () {
     ])
         .pipe(less())
         .pipe(concatcss('app.css'))
-        .pipe(gulp.dest('./Content/styles'));
+        .pipe(gulp.dest('./Content/styles/'));
 });
 
 gulp.task('app:scripts', function () {
@@ -60,7 +60,7 @@ gulp.task('app:scripts', function () {
             './Scripts/Source/Components/GameCpt.tsx'
     ])
         .pipe(tsc(tsProject))
-        .pipe(gulp.dest('./Content/scripts'));
+        .pipe(gulp.dest('./Content/scripts/'));
 });
 
 // -----------------------------
