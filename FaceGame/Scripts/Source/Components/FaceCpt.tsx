@@ -69,7 +69,7 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
 
         /// <summary>Renders the clickable popover.</summary>
 
-        return <ReactBootstrap.Popover id="face-popover" title="Детали">
+        return <ReactBootstrap.Popover id="face-popover">
                    <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
                        <TextInputCpt title="Имя" value={this.state.firstName} state={this.state.face.firstNameState} onChange={v => this.state.firstName = v}/>
                        <TextInputCpt title="Фамилия" value={this.state.lastName} state={this.state.face.lastNameState} onChange={v => this.state.lastName = v}/>
