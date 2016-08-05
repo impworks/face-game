@@ -3,17 +3,15 @@
 /// <reference path="../../Typings/lodash.d.ts" />
 
 import TextInputCpt from "./TextInputCpt";
+import { IFaceState } from "../ViewModels/IFaceState";
 
 interface IFaceCptProperties extends React.Props<FaceCpt> {
     face: IFaceState;
+    onSave: (face: IFaceState) => void;
 }
 
 interface IFaceIntermediateState {
     face: IFaceState;
-
-    firstName: string;
-    lastName: string;
-    middleName: string;
 
     isHovered: boolean;
 }
@@ -29,10 +27,6 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
 
         this.state = {
             face: props.face,
-
-            firstName: props.face.firstName,
-            lastName: props.face.lastName,
-            middleName: props.face.middleName,
 
             isHovered: false
         };
@@ -69,13 +63,14 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
 
         /// <summary>Renders the clickable popover.</summary>
 
+        var face = this.state.face;
         return <ReactBootstrap.Popover id="face-popover">
                    <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
-                       <TextInputCpt title="Имя" value={this.state.firstName} state={this.state.face.firstNameState} onChange={v => this.state.firstName = v}/>
-                       <TextInputCpt title="Фамилия" value={this.state.lastName} state={this.state.face.lastNameState} onChange={v => this.state.lastName = v}/>
+                       <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} onChange={v => face.firstName = v}/>
+                       <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} onChange={v => face.lastName = v}/>
                        {
-                            this.state.face.hasMiddleName &&
-                            <TextInputCpt title="Отчество" value={this.state.middleName} state={this.state.face.middleNameState} onChange={v => this.state.middleName = v} />
+                            face.hasMiddleName &&
+                            <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} onChange={v => face.middleName = v} />
                        }
                        <div className="form-group">
                            <div className="col-sm-12">
@@ -110,7 +105,9 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
 
     private onSave(e: Event) {
         e.preventDefault();
-        console.log('save: ');
-        console.log(this.state);
+
+        if (this.props.onSave) {
+            this.props.onSave(this.state.face);
+        }
     }
 }

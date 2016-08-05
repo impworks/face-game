@@ -1,4 +1,4 @@
-﻿interface IFaceState {
+﻿export interface IFaceState {
 
     // -----------------------------------
     // Value properties
@@ -20,11 +20,4 @@
     firstNameState?: boolean;
     lastNameState?: boolean;
     middleNameState?: boolean;
-
-    // -----------------------------------
-    // State properties
-    // -----------------------------------
-
-    isHovered?: boolean;
-    isOpen?: boolean;
 }

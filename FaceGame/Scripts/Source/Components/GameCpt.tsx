@@ -1,10 +1,16 @@
 ﻿/// <reference path="../../Typings/react-global.d.ts" />
 /// <reference path="../../Typings/react-bootstrap.d.ts" />
-/// <reference path="../ViewModels/IState.ts"/>
 
 import FaceCpt from "./FaceCpt";
+import { IGameState } from "../ViewModels/IGameState";
+import { IFaceState } from "../ViewModels/IFaceState";
 
-export default class GameCpt extends React.Component<any, IState> {
+interface IGameComponentState {
+    gameState: IGameState;
+    isLoaded: boolean;
+}
+
+export default class GameCpt extends React.Component<any, IGameComponentState> {
 
     // -----------------------------------
     // Constructor
@@ -19,13 +25,14 @@ export default class GameCpt extends React.Component<any, IState> {
     // -----------------------------------
 
     render() {
-        var childFaces = this.state.faces.map(x => <FaceCpt key={x.id} face={x}/>);
+        var game = this.state.gameState;
+        var childFaces = game.faces.map(x => <FaceCpt key={x.id} face={x} onSave={this.checkFace.bind(this)} />);
 
         return (
             <div className="content-wrapper">
                 <div className="content-header">
                     <div className="score-wrapper">
-                        Ваш счет: <strong>{this.state.score}</strong>
+                        Ваш счет: <strong>{game.score}</strong>
                     </div>
                     <div className="finish-wrapper">
                         <ReactBootstrap.Button className="btn btn-primary" onClick={this.finishGame}>
@@ -46,8 +53,11 @@ export default class GameCpt extends React.Component<any, IState> {
     // -----------------------------------
 
     private finishGame() {
-        // TODO
         console.log('finished?');
+    }
+
+    private checkFace(face: boolean) {
+        console.log('checked?');
     }
 
     // -----------------------------------
@@ -55,14 +65,17 @@ export default class GameCpt extends React.Component<any, IState> {
     // -----------------------------------
 
     componentWillMount(): void {
-        this.setState(this.getDefaultState());
+        this.setState({
+            gameState: this.getDefaultState(),
+            isLoaded: true
+        });
     }
 
     // -----------------------------------
     // Helpers
     // -----------------------------------
 
-    private getDefaultState(): IState {
+    private getDefaultState(): IGameState {
         return {
             score: 0,
             faces: [
@@ -83,6 +96,6 @@ export default class GameCpt extends React.Component<any, IState> {
                     height: 150
                 }
             ]
-        }
+        };
     }
 }
