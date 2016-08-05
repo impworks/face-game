@@ -62,6 +62,10 @@ namespace FaceGame.Code
 
             state.Score += result.ScoreAdded;
 
+            face.FirstNameState = result.IsFirstNameCorrect;
+            face.LastNameState = result.IsLastNameCorrect;
+            face.MiddleNameState = result.IsMiddleNameCorrect;
+
             return result;
         }
 

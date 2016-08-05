@@ -19,6 +19,10 @@
         public string LastName { get; set; }
         public string MiddleName { get; set; }
 
+        public bool? FirstNameState { get; set; }
+        public bool? LastNameState { get; set; }
+        public bool? MiddleNameState { get; set; }
+
         /// <summary>
         /// Returns a copy of the face definition, but with empty info.
         /// </summary>

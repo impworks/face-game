@@ -17,6 +17,10 @@
     lastName?: string;
     middleName?: string;
 
+    firstNameState?: boolean;
+    lastNameState?: boolean;
+    middleNameState?: boolean;
+
     // -----------------------------------
     // State properties
     // -----------------------------------
