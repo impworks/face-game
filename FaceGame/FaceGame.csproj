@@ -146,6 +146,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\HiscoreManager.cs" />
     <Compile Include="Code\StateManager.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -171,8 +172,9 @@
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="Scripts\Libs\bootstrap.js" />
-    <Content Include="Scripts\Libs\jquery-1.10.2.js" />
+    <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\lodash.js" />
+    <Content Include="Scripts\Libs\react-bootstrap.js" />
     <Content Include="Scripts\Libs\react-dom.js" />
     <Content Include="Scripts\Libs\react.js" />
     <Content Include="Scripts\Libs\require.js" />
@@ -207,6 +209,7 @@
     <TypeScriptCompile Include="Scripts\Source\Components\TextInputCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IFaceState.ts" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IGameState.ts" />
+    <TypeScriptCompile Include="Scripts\Typings\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\lodash.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-dom.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-global.d.ts" />

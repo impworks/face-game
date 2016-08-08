@@ -4,6 +4,7 @@ interface IInputTextComponentProperties extends React.Props<TextInputCpt> {
     title: string;
     value: string;
     state?: boolean;
+    disabled?: boolean;
     onChange?: (value: string) => void;
 }
 
@@ -47,7 +48,8 @@ export default class TextInputCpt extends React.Component<IInputTextComponentPro
                               className="form-control"
                               disabled={typeof this.props.state !== "undefined"}
                               value={this.state.value}
-                              onChange={this.onInputChange.bind(this)}/>
+                              onChange={this.onInputChange.bind(this) }
+                              readonly={this.props.disabled} />
                    </div>
                    {icon}
                </div>;

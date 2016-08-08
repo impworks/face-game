@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../Typings/react-global.d.ts" />
 /// <reference path="../../Typings/react-bootstrap.d.ts" />
+/// <reference path="../../Typings/jquery.d.ts" />
 
 import FaceCpt from "./FaceCpt";
 import { IGameState } from "../ViewModels/IGameState";
@@ -56,8 +57,11 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
         console.log('finished?');
     }
 
-    private checkFace(face: boolean) {
+    private checkFace(face: IFaceState): JQueryPromise<any> {
         console.log('checked?');
+
+        // TODO
+        return null;
     }
 
     // -----------------------------------

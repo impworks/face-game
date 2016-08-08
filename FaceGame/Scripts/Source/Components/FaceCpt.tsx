@@ -1,18 +1,20 @@
 ﻿/// <reference path="../../Typings/react.d.ts" />
 /// <reference path="../../Typings/react-bootstrap.d.ts" />
 /// <reference path="../../Typings/lodash.d.ts" />
+/// <reference path="../../Typings/jquery.d.ts" />
 
 import TextInputCpt from "./TextInputCpt";
 import { IFaceState } from "../ViewModels/IFaceState";
 
 interface IFaceCptProperties extends React.Props<FaceCpt> {
     face: IFaceState;
-    onSave: (face: IFaceState) => void;
+    onSave: (face: IFaceState) => JQueryPromise<any>;
 }
 
 interface IFaceIntermediateState {
     face: IFaceState;
 
+    isProcessing: boolean;
     isHovered: boolean;
 }
 
@@ -28,6 +30,7 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
         this.state = {
             face: props.face,
 
+            isProcessing: true,
             isHovered: false
         };
     }
@@ -66,11 +69,11 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
         var face = this.state.face;
         return <ReactBootstrap.Popover id="face-popover">
                    <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
-                       <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} onChange={v => face.firstName = v}/>
-                       <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} onChange={v => face.lastName = v}/>
+                       <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} disabled={this.state.isProcessing} onChange={v => face.firstName = v}/>
+                       <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} disabled={this.state.isProcessing} onChange={v => face.lastName = v}/>
                        {
                             face.hasMiddleName &&
-                            <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} onChange={v => face.middleName = v} />
+                            <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} disabled={this.state.isProcessing} onChange={v => face.middleName = v}/>
                        }
                        <div className="form-group">
                            <div className="col-sm-12">
@@ -106,8 +109,10 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
     private onSave(e: Event) {
         e.preventDefault();
 
+        this.state.isProcessing = true;
         if (this.props.onSave) {
-            this.props.onSave(this.state.face);
+            this.props.onSave(this.state.face)
+                .then(() => this.state.isProcessing = false);
         }
     }
 }

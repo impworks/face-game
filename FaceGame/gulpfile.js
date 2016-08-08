@@ -23,7 +23,7 @@ gulp.task('lib:css', function () {
 
 gulp.task('lib:scripts', function () {
     return gulp.src([
-            './Scripts/Libs/jquery-1.10.2.js',
+            './Scripts/Libs/jquery.js',
             './Scripts/Libs/bootstrap.js',
             './Scripts/Libs/lodash.js',
             './Scripts/Libs/react.js',
