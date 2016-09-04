@@ -9,7 +9,7 @@ namespace FaceGame.Controllers
     /// <summary>
     /// The game-handler controller.
     /// </summary>
-    [RoutePrefix("~/api")]
+    [RoutePrefix("api")]
     public class GameController: ApiController
     {
         public GameController(HiscoreManager hiscoreMgr, StateManager stateMgr)

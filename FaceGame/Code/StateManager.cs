@@ -40,7 +40,7 @@ namespace FaceGame.Code
         /// <summary>
         /// Validates an identification attempt.
         /// </summary>
-        public IdentificationResponseVM ApplyResponse(StateVM state, IdentificationVM ident)
+        public IdentificationResponseVM Identificate(StateVM state, IdentificationVM ident)
         {
             var face = state.Faces.FirstOrDefault(x => x.Id == ident.Id);
             if(face == null)
