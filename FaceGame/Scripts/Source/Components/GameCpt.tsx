@@ -22,6 +22,12 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
     }
 
     // -----------------------------------
+    // Constants
+    // -----------------------------------
+
+    static API_ROOT = "/api/";
+
+    // -----------------------------------
     // Render
     // -----------------------------------
 
@@ -58,10 +64,28 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
     }
 
     private checkFace(face: IFaceState): JQueryPromise<any> {
-        console.log('checked?');
+        var promise = $.ajax({
+            url: GameCpt.API_ROOT + 'identify',
+            data: face,
+            method: 'POST'
+        }).then(
+            (data: IIdentificationResponse) => {
+                console.log('OK');
 
-        // TODO
-        return null;
+                face.firstNameState = data.isFirstNameCorrect;
+                face.lastNameState = data.isLastNameCorrect;
+
+                if(face.hasMiddleName)
+                    face.middleNameState = data.isMiddleNameCorrect;
+
+                this.state.gameState.score += data.scoreAdded;
+            },
+            (xhr, status) => {
+                console.log('FAIL: ' + status);
+            }
+        );
+
+        return promise;
     }
 
     // -----------------------------------
