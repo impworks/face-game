@@ -21,7 +21,11 @@ namespace FaceGame.Controllers
         private readonly HiscoreManager _hiscoreManager;
         private readonly StateManager _stateManager;
 
-        private StateVM State => HttpContext.Current.Session[nameof(StateVM)] as StateVM;
+        private StateVM State
+        {
+            get { return HttpContext.Current.Session[nameof(StateVM)] as StateVM; }
+            set { HttpContext.Current.Session[nameof(StateVM)] = value; }
+        } 
 
         /// <summary>
         /// Requests current state or creates a new one.
@@ -31,7 +35,7 @@ namespace FaceGame.Controllers
         public StateVM GetState()
         {
             if (State == null)
-                HttpContext.Current.Session[nameof(StateVM)] = _stateManager.CreateNewState();
+                State = _stateManager.CreateNewState();
 
             return State;
         }
@@ -56,11 +60,15 @@ namespace FaceGame.Controllers
         [HttpPost]
         public int Complete(string name)
         {
-            if (State == null)
+            if (State == null || State.Score == 0)
                 return 0;
 
-            _hiscoreManager.AddHiscore(name, State.Score);
-            return State.Score;
+            var score = State.Score;
+            State = null;
+
+            _hiscoreManager.AddHiscore(name, score);
+
+            return score;
         }
     }
 }

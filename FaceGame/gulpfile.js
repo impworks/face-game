@@ -26,6 +26,7 @@ gulp.task('lib:scripts', function () {
             './Scripts/Libs/jquery.js',
             './Scripts/Libs/bootstrap.js',
             './Scripts/Libs/lodash.js',
+            './Scripts/Libs/toastr.js',
             './Scripts/Libs/react.js',
             './Scripts/Libs/react-dom.js',
             './Scripts/Libs/react-bootstrap.js',

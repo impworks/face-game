@@ -70,7 +70,11 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
             method: 'POST'
         }).then(
             (data: IIdentificationResponse) => {
-                console.log('OK');
+                if (data.scoreAdded > 0) {
+                    toastr.success('Вы заработали ' + data.scoreAdded + ' очков.');
+                } else {
+                    toastr.info('Неверно.');
+                }
 
                 face.firstNameState = data.isFirstNameCorrect;
                 face.lastNameState = data.isLastNameCorrect;
@@ -81,6 +85,7 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
                 this.state.gameState.score += data.scoreAdded;
             },
             (xhr, status) => {
+                toastr.error('Ошибка соединения с сервером');
                 console.log('FAIL: ' + status);
             }
         );
