@@ -1,10 +1,12 @@
 ﻿/// <reference path="../../Typings/react-global.d.ts" />
 /// <reference path="../../Typings/react-bootstrap.d.ts" />
 /// <reference path="../../Typings/jquery.d.ts" />
+/// <reference path="../../Typings/toastr.d.ts" />
 
 import FaceCpt from "./FaceCpt";
 import { IGameState } from "../ViewModels/IGameState";
 import { IFaceState } from "../ViewModels/IFaceState";
+import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
 
 interface IGameComponentState {
     gameState: IGameState;
@@ -12,6 +14,12 @@ interface IGameComponentState {
 }
 
 export default class GameCpt extends React.Component<any, IGameComponentState> {
+
+    // -----------------------------------
+    // Constants
+    // -----------------------------------
+
+    static API_ROOT = "/api/";
 
     // -----------------------------------
     // Constructor
@@ -22,18 +30,22 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
     }
 
     // -----------------------------------
-    // Constants
+    // Fields
     // -----------------------------------
 
-    static API_ROOT = "/api/";
+    private _request: JQueryXHR;
 
     // -----------------------------------
     // Render
     // -----------------------------------
 
     render() {
+
+        if (this.state == null)
+            return null;
+
         var game = this.state.gameState;
-        var childFaces = game.faces.map(x => <FaceCpt key={x.id} face={x} onSave={this.checkFace.bind(this)} />);
+        var faces = game.faces.map(x => <FaceCpt key={x.id} face={x} onSave={this.checkFace.bind(this)} />);
 
         return (
             <div className="content-wrapper">
@@ -49,7 +61,7 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
                 </div>
                 <div className="game-wrapper">
                     <img src="./Assets/images/group.jpg" />
-                    {childFaces}
+                    {faces}
                 </div>
             </div>
         );
@@ -97,38 +109,27 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
     // Overrides
     // -----------------------------------
 
-    componentWillMount(): void {
-        this.setState({
-            gameState: this.getDefaultState(),
-            isLoaded: true
-        });
+    componentDidMount(): void {
+        this._request = $.get(GameCpt.API_ROOT + 'state',
+            result => {
+                this.setState({
+                    gameState: result,
+                    isLoaded: true
+                });
+            });
     }
 
-    // -----------------------------------
-    // Helpers
-    // -----------------------------------
+    componentWillUnmount(): void {
+        if (this._request) {
+            this._request.abort();
+        }
+    }
 
     private getDefaultState(): IGameState {
         return {
-            score: 0,
-            faces: [
-                {
-                    id: 1,
-
-                    x: 10,
-                    y: 10,
-                    width: 150,
-                    height: 150
-                },
-                {
-                    id: 2,
-
-                    x: 300,
-                    y: 20,
-                    width: 150,
-                    height: 150
-                }
-            ]
+            isFinished: false,
+            faces: [],
+            score: 0
         };
     }
 }

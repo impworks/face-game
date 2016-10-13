@@ -1,4 +1,4 @@
-﻿interface IIdentificationResponse {
+﻿export interface IIdentificationResponse {
 
     isFirstNameCorrect: boolean;
     isLastNameCorrect: boolean;

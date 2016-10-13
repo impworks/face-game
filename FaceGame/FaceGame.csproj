@@ -163,6 +163,7 @@
   <ItemGroup>
     <Content Include="Assets\styles\bootstrap.css" />
     <Content Include="Assets\styles\bootstrap.min.css" />
+    <None Include="Assets\styles\toastr.less" />
     <Content Include="Content\scripts\app.js" />
     <Content Include="Content\scripts\libs.js" />
     <Content Include="Content\styles\app.css" />
@@ -178,6 +179,7 @@
     <Content Include="Scripts\Libs\react-dom.js" />
     <Content Include="Scripts\Libs\react.js" />
     <Content Include="Scripts\Libs\require.js" />
+    <Content Include="Scripts\Libs\toastr.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -190,6 +192,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Content\group.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Hiscores.cshtml" />
@@ -216,6 +219,7 @@
     <TypeScriptCompile Include="Scripts\Typings\react-dom.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react-global.d.ts" />
     <TypeScriptCompile Include="Scripts\Typings\react.d.ts" />
+    <TypeScriptCompile Include="Scripts\Typings\toastr.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
