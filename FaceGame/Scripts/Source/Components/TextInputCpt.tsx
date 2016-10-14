@@ -34,7 +34,9 @@ export default class TextInputCpt extends React.Component<IInputTextComponentPro
         var groupClasses = "form-group";
         var icon = null as JSX.Element;
 
-        if (typeof this.props.state !== "undefined") {
+        var hasState = this.props.state != null;
+
+        if (hasState) {
             groupClasses += ` has-feedback has-${this.props.state ? "success" : "error"}`;
 
             var iconClasses = `glyphicon glyphicon-${this.props.state ? "ok" : "remove"} form-control-feedback`;
@@ -46,12 +48,12 @@ export default class TextInputCpt extends React.Component<IInputTextComponentPro
                    <div className="col-sm-8">
                        <input type="text"
                               className="form-control"
-                              disabled={typeof this.props.state !== "undefined"}
+                              disabled={hasState}
+                              readOnly={hasState}
                               value={this.state.value}
-                              onChange={this.onInputChange.bind(this) }
-                              readonly={this.props.disabled} />
+                              onChange={this.onInputChange.bind(this)} />
+                        {icon}
                    </div>
-                   {icon}
                </div>;
     }
 
