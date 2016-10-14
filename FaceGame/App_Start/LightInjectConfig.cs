@@ -1,4 +1,5 @@
-﻿using FaceGame.Code;
+﻿using System.Web.Http;
+using FaceGame.Code;
 using LightInject;
 
 namespace FaceGame
@@ -9,9 +10,13 @@ namespace FaceGame
         {
             var container = new ServiceContainer();
             container.RegisterControllers();
+            container.RegisterApiControllers();
 
             container.Register<HiscoreManager>(new PerRequestLifeTime());
             container.Register<StateManager>(new PerRequestLifeTime());
+
+            container.EnablePerWebRequestScope();
+            container.EnableWebApi(GlobalConfiguration.Configuration);
 
             container.EnableMvc();
         }
