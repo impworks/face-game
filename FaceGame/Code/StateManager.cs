@@ -49,11 +49,12 @@ namespace FaceGame.Code
             if(new[] { face.FirstName, face.LastName, face.MiddleName }.Any(x => !string.IsNullOrEmpty(x)))
                 throw new ArgumentException("Face already detected!");
 
+            var faceDef = Group.Faces.First(x => x.Id == ident.Id);
             var result = new IdentificationResponseVM
             {
-                IsFirstNameCorrect = Clean(face.FirstName) == Clean(ident.FirstName),
-                IsLastNameCorrect = Clean(face.LastName) == Clean(ident.LastName),
-                IsMiddleNameCorrect = face.HasMiddleName && Clean(face.MiddleName) == Clean(ident.MiddleName)
+                IsFirstNameCorrect = Clean(faceDef.FirstName) == Clean(ident.FirstName),
+                IsLastNameCorrect = Clean(faceDef.LastName) == Clean(ident.LastName),
+                IsMiddleNameCorrect = faceDef.HasMiddleName && Clean(faceDef.MiddleName) == Clean(ident.MiddleName)
             };
 
             result.ScoreAdded = (result.IsFirstNameCorrect ? FIRST_NAME_SCORE : 0)
