@@ -5,10 +5,11 @@
 
 import TextInputCpt from "./TextInputCpt";
 import { IFaceState } from "../ViewModels/IFaceState";
+import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
 
 interface IFaceCptProperties extends React.Props<FaceCpt> {
     face: IFaceState;
-    onSave: (face: IFaceState) => JQueryPromise<any>;
+    onSave: (face: IFaceState) => JQueryPromise<IIdentificationResponse>;
 }
 
 interface IFaceIntermediateState {
@@ -43,7 +44,7 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
 
         /// <summary>Renders the face component.</summary>
 
-        var blockStyles  = {
+        var blockStyles = {
             left: this.state.face.x,
             top: this.state.face.y,
             width: this.state.face.width,
@@ -55,9 +56,9 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
         return (
             <ReactBootstrap.OverlayTrigger rootClose={true} placement="bottom" trigger="click" overlay={popover}>
                 <div className={blockClasses}
-                     style={blockStyles}
-                     onMouseOver={this.onMouseOver.bind(this)}
-                     onMouseOut={this.onMouseOut.bind(this) } />
+                    style={blockStyles}
+                    onMouseOver={this.onMouseOver.bind(this) }
+                    onMouseOut={this.onMouseOut.bind(this) } />
             </ReactBootstrap.OverlayTrigger>
         );
     }
@@ -67,26 +68,30 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
         /// <summary>Renders the clickable popover.</summary>
 
         var face = this.state.face;
+        var canSave = face.firstNameState == null && face.lastName == null;
         return <ReactBootstrap.Popover id="face-popover">
-                   <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
-                       <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} disabled={this.state.isProcessing} onChange={v => face.firstName = v}/>
-                       <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} disabled={this.state.isProcessing} onChange={v => face.lastName = v}/>
-                       {
-                            face.hasMiddleName &&
-                            <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} disabled={this.state.isProcessing} onChange={v => face.middleName = v}/>
-                       }
-                       <div className="form-group">
-                           <div className="col-sm-12">
-                               <div className="pull-right">
-                                   <ReactBootstrap.Button type="submit" className="btn btn-primary">
-                                       Сохранить
-                                   </ReactBootstrap.Button>
-                               </div>
-                               <div className="clearfix"/>
-                           </div>
-                       </div>
-                   </form>
-               </ReactBootstrap.Popover>;
+            <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
+                <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} disabled={this.state.isProcessing} onChange={v => face.firstName = v}/>
+                <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} disabled={this.state.isProcessing} onChange={v => face.lastName = v}/>
+                {
+                    face.hasMiddleName &&
+                    <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} disabled={this.state.isProcessing} onChange={v => face.middleName = v}/>
+                }
+                {
+                    canSave &&
+                    <div className="form-group">
+                        <div className="col-sm-12">
+                            <div className="pull-right">
+                                <ReactBootstrap.Button type="submit" className="btn btn-primary">
+                                    Сохранить
+                                </ReactBootstrap.Button>
+                            </div>
+                            <div className="clearfix"/>
+                        </div>
+                    </div>
+                }
+            </form>
+        </ReactBootstrap.Popover>;
     }
 
     // -----------------------------------
@@ -109,10 +114,22 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
     private onSave(e: Event) {
         e.preventDefault();
 
-        this.state.isProcessing = true;
+        this.setPty('isProcessing', true);
         if (this.props.onSave) {
             this.props.onSave(this.state.face)
-                .then(() => this.state.isProcessing = false);
+                .then(response => {
+                    var newState = _.merge({}, this.state,
+                        {
+                            isProcessing: false,
+                            face: {
+                                firstNameState: response.isFirstNameCorrect,
+                                lastNameState: response.isLastNameCorrect,
+                                middleNameState: response.isMiddleNameCorrect
+                            }
+                        }
+                    );
+                    this.setState(newState);
+                });
         }
     }
 }

@@ -75,26 +75,29 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
         console.log('finished?');
     }
 
-    private checkFace(face: IFaceState): JQueryPromise<any> {
+    private checkFace(face: IFaceState): JQueryPromise<IIdentificationResponse> {
         var promise = $.ajax({
             url: GameCpt.API_ROOT + 'identify',
             data: face,
             method: 'POST'
         }).then(
-            (data: IIdentificationResponse) => {
-                if (data.scoreAdded > 0) {
-                    toastr.success('Вы заработали ' + data.scoreAdded + ' очков.');
+            (response: IIdentificationResponse) => {
+                if (response.scoreAdded > 0) {
+                    toastr.success('Вы заработали ' + response.scoreAdded + ' очков.');
                 } else {
                     toastr.info('Неверно.');
                 }
 
-                face.firstNameState = data.isFirstNameCorrect;
-                face.lastNameState = data.isLastNameCorrect;
+                var newState = _.merge({}, this.state, {
+                        gameState: {
+                            score: this.state.gameState.score + response.scoreAdded
+                        }
+                    }
+                );
 
-                if(face.hasMiddleName)
-                    face.middleNameState = data.isMiddleNameCorrect;
+                this.setState(newState);
 
-                this.state.gameState.score += data.scoreAdded;
+                return response;
             },
             (xhr, status) => {
                 toastr.error('Ошибка соединения с сервером');
