@@ -50,11 +50,17 @@ namespace FaceGame.Code
                 throw new ArgumentException("Face already detected!");
 
             var faceDef = Group.Faces.First(x => x.Id == ident.Id);
+
+            face.FirstName = ident.FirstName;
+            face.LastName = ident.LastName;
+            if (faceDef.HasMiddleName)
+                face.MiddleName = ident.MiddleName;
+
             var result = new IdentificationResponseVM
             {
-                IsFirstNameCorrect = Clean(faceDef.FirstName) == Clean(ident.FirstName),
-                IsLastNameCorrect = Clean(faceDef.LastName) == Clean(ident.LastName),
-                IsMiddleNameCorrect = faceDef.HasMiddleName && Clean(faceDef.MiddleName) == Clean(ident.MiddleName)
+                IsFirstNameCorrect = IsCorrect(faceDef.FirstName, face.FirstName),
+                IsLastNameCorrect = IsCorrect(faceDef.LastName, face.LastName),
+                IsMiddleNameCorrect = faceDef.HasMiddleName && IsCorrect(faceDef.MiddleName, face.MiddleName)
             };
 
             result.ScoreAdded = (result.IsFirstNameCorrect ? FIRST_NAME_SCORE : 0)
@@ -90,7 +96,15 @@ namespace FaceGame.Code
         private static string Clean(string name)
         {
             return name?.ToLowerInvariant().Trim().Replace("ё", "е");
+        }
 
+        /// <summary>
+        /// Checks if the given version matches the definition.
+        /// </summary>
+        private static bool IsCorrect(string def, string opt)
+        {
+            opt = Clean(opt);
+            return Clean(def).Split(',').Any(x => x == opt);
         }
 
         #endregion
