@@ -214,6 +214,7 @@
     <TypeScriptCompile Include="Scripts\Source\Components\FaceCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\GameCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\TextInputCpt.tsx" />
+    <TypeScriptCompile Include="Scripts\Source\Tools\ComponentBase.ts" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IFaceState.ts" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IGameState.ts" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IIdentificationResponse.ts" />

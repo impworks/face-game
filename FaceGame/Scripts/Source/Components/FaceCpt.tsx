@@ -3,6 +3,7 @@
 /// <reference path="../../Typings/lodash.d.ts" />
 /// <reference path="../../Typings/jquery.d.ts" />
 
+import ComponentBase from "../Tools/ComponentBase";
 import TextInputCpt from "./TextInputCpt";
 import { IFaceState } from "../ViewModels/IFaceState";
 import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
@@ -19,7 +20,7 @@ interface IFaceIntermediateState {
     isHovered: boolean;
 }
 
-export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIntermediateState> {
+export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceIntermediateState> {
 
     // -----------------------------------
     // Constructor
@@ -99,36 +100,32 @@ export default class FaceCpt extends React.Component<IFaceCptProperties, IFaceIn
     // -----------------------------------
 
     private onMouseOver() {
-        this.setPty('isHovered', true);
+        this.updateState(x => x.isHovered = true);
     }
 
     private onMouseOut() {
-        this.setPty('isHovered', false);
+        this.updateState(x => x.isHovered = false);
     }
 
     private setPty(name: string, value: any) {
-        var newState = _.extend(this.state, { [name]: value });
+        var newState = _.extend({}, this.state);
+        newState[name] = value;
         this.setState(newState);
     }
 
     private onSave(e: Event) {
         e.preventDefault();
 
-        this.setPty('isProcessing', true);
+        this.updateState(x => x.isProcessing = true);
         if (this.props.onSave) {
             this.props.onSave(this.state.face)
                 .then(response => {
-                    var newState = _.merge({}, this.state,
-                        {
-                            isProcessing: false,
-                            face: {
-                                firstNameState: response.isFirstNameCorrect,
-                                lastNameState: response.isLastNameCorrect,
-                                middleNameState: response.isMiddleNameCorrect
-                            }
-                        }
-                    );
-                    this.setState(newState);
+                    this.updateState(state => {
+                        state.isProcessing = false;
+                        state.face.firstNameState = response.isFirstNameCorrect;
+                        state.face.lastNameState = response.isLastNameCorrect;
+                        state.face.middleNameState = response.isMiddleNameCorrect;
+                    });
                 });
         }
     }

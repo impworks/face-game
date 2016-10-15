@@ -3,6 +3,7 @@
 /// <reference path="../../Typings/jquery.d.ts" />
 /// <reference path="../../Typings/toastr.d.ts" />
 
+import ComponentBase from "../Tools/ComponentBase";
 import FaceCpt from "./FaceCpt";
 import { IGameState } from "../ViewModels/IGameState";
 import { IFaceState } from "../ViewModels/IFaceState";
@@ -13,7 +14,7 @@ interface IGameComponentState {
     isLoaded: boolean;
 }
 
-export default class GameCpt extends React.Component<any, IGameComponentState> {
+export default class GameCpt extends ComponentBase<any, IGameComponentState> {
 
     // -----------------------------------
     // Constants
@@ -88,14 +89,7 @@ export default class GameCpt extends React.Component<any, IGameComponentState> {
                     toastr.info('Неверно.');
                 }
 
-                var newState = _.merge({}, this.state, {
-                        gameState: {
-                            score: this.state.gameState.score + response.scoreAdded
-                        }
-                    }
-                );
-
-                this.setState(newState);
+                this.updateState(state => state.gameState.score += response.scoreAdded);
 
                 return response;
             },
