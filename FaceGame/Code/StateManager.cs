@@ -76,6 +76,48 @@ namespace FaceGame.Code
             return result;
         }
 
+        /// <summary>
+        /// Creates a new face.
+        /// </summary>
+        public void Define(FaceVM face)
+        {
+            face.HasMiddleName = !string.IsNullOrEmpty(face.MiddleName);
+            face.FirstNameState = face.LastNameState = face.MiddleNameState = null;
+            face.Id = Group.Faces.Any() ? Group.Faces.Select(x => x.Id).Max() + 1 : 1;
+
+            Group.Faces.Add(face);
+
+            var data = JsonConvert.SerializeObject(Group);
+            File.WriteAllText(HttpContext.Current.Server.MapPath(FILE_PATH), data);
+        }
+
+        /// <summary>
+        /// Pushes newly-added faces to state.
+        /// </summary>
+        public void PatchState(StateVM state)
+        {
+            if (state.Faces.Length == Group.Faces.Count)
+                return;
+
+            var newFaces = Group.Faces.Where(x => !state.Faces.Any(y => y.Id == x.Id));
+            state.Faces = state.Faces.Concat(newFaces).ToArray();
+        }
+
+        /// <summary>
+        /// Marks the game as finished.
+        /// </summary>
+        public void FinishGame(StateVM state)
+        {
+            state.IsFinished = true;
+            foreach (var face in state.Faces)
+            {
+                face.FirstNameState = face.FirstNameState ?? false;
+                face.LastNameState = face.LastNameState ?? false;
+                if (face.HasMiddleName)
+                    face.MiddleNameState = face.MiddleNameState ?? false;
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -110,3 +152,4 @@ namespace FaceGame.Code
         #endregion
     }
 }
+

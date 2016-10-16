@@ -5,6 +5,7 @@
 
 import ComponentBase from "../Tools/ComponentBase";
 import TextInputCpt from "./TextInputCpt";
+import DragHandle from "./DragHandle";
 import { IFaceState } from "../ViewModels/IFaceState";
 import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
 
@@ -45,23 +46,36 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
 
         /// <summary>Renders the face component.</summary>
 
+        var face = this.state.face;
         var blockStyles = {
-            left: this.state.face.x,
-            top: this.state.face.y,
-            width: this.state.face.width,
-            height: this.state.face.height
+            left: face.x1,
+            top: face.y1,
+            width: face.x2 - face.x1,
+            height: face.y2 - face.y1
         };
 
         var blockClasses = this.getOverlayClasses();
         var popover = this.renderPopover();
 
+        var canDesign = face.isDesignMode && face.firstNameState == null;
+
         return (
-            <ReactBootstrap.OverlayTrigger rootClose={true} placement="bottom" trigger="click" overlay={popover}>
-                <div className={blockClasses}
-                    style={blockStyles}
-                    onMouseOver={this.onMouseOver.bind(this) }
-                    onMouseOut={this.onMouseOut.bind(this) } />
-            </ReactBootstrap.OverlayTrigger>
+            <div>
+                <ReactBootstrap.OverlayTrigger rootClose={true} placement="bottom" trigger="click" overlay={popover}>
+                    <div className={blockClasses}
+                         style={blockStyles}
+                         onMouseOver={this.onMouseOver.bind(this)}
+                         onMouseOut={this.onMouseOut.bind(this)} />
+                </ReactBootstrap.OverlayTrigger>
+                {
+                    canDesign &&
+                    <DragHandle object={this.state.face} onUpdate={this.onMove.bind(this) } xProp="x1" yProp="y1" otherXProp="x2" otherYProp="y2" />
+                }
+                {
+                    canDesign &&
+                    <DragHandle object={this.state.face} onUpdate={this.onMove.bind(this) } xProp="x2" yProp="y2" />
+                }
+            </div>
         );
     }
 
@@ -71,10 +85,11 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
 
         var face = this.state.face;
         var canSave = face.firstNameState == null && face.lastName == null;
+
         return <ReactBootstrap.Popover id="face-popover">
             <form className="form-horizontal " onSubmit={this.onSave.bind(this) }>
-                <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} disabled={this.state.isProcessing} onChange={v => face.firstName = v}/>
                 <TextInputCpt title="Фамилия" value={face.lastName} state={face.lastNameState} disabled={this.state.isProcessing} onChange={v => face.lastName = v}/>
+                <TextInputCpt title="Имя" value={face.firstName} state={face.firstNameState} disabled={this.state.isProcessing} onChange={v => face.firstName = v}/>
                 {
                     face.hasMiddleName &&
                     <TextInputCpt title="Отчество" value={face.middleName} state={face.middleNameState} disabled={this.state.isProcessing} onChange={v => face.middleName = v}/>
@@ -100,6 +115,7 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
         var detected = this.props.face.firstNameState;
         var isHovered = this.state.isHovered;
         var classes = [
+            'face',
             detected == null ? 'face-new' : 'face-identified',
             isHovered ? 'hovered' : ''
         ];
@@ -119,10 +135,8 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
         this.updateState(x => x.isHovered = false);
     }
 
-    private setPty(name: string, value: any) {
-        var newState = _.extend({}, this.state);
-        newState[name] = value;
-        this.setState(newState);
+    private onMove() {
+        this.updateState(() => {});
     }
 
     private onSave(e: Event) {
@@ -134,9 +148,9 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
                 .then(response => {
                     this.updateState(state => {
                         state.isProcessing = false;
-                        state.face.firstNameState = response.isFirstNameCorrect;
-                        state.face.lastNameState = response.isLastNameCorrect;
-                        state.face.middleNameState = response.isMiddleNameCorrect;
+                        state.face.firstNameState = !response || response.isFirstNameCorrect;
+                        state.face.lastNameState = !response || response.isLastNameCorrect;
+                        state.face.middleNameState = !response || response.isMiddleNameCorrect;
                     });
                 });
         }

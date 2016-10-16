@@ -38,6 +38,8 @@ namespace FaceGame.Controllers
             if (State == null)
                 State = _stateManager.CreateNewState();
 
+            _stateManager.PatchState(State);
+
             return State;
         }
         
@@ -64,10 +66,26 @@ namespace FaceGame.Controllers
             if (State == null || State.Score == 0 || State.IsFinished || string.IsNullOrEmpty(vm.Name))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            State.IsFinished = true;
+            _stateManager.FinishGame(State);
             var rank = _hiscoreManager.AddHiscore(vm.Name, State.Score);
 
             return rank;
+        }
+
+        /// <summary>
+        /// Defines a new face.
+        /// </summary>
+        [Route("define")]
+        [HttpPost]
+        public void Design(FaceVM face)
+        {
+            var req = HttpContext.Current.Request;
+            var auth = req.Url.Authority;
+
+            if (!auth.StartsWith("localhost"))
+                return;
+
+            _stateManager.Define(face);
         }
     }
 }

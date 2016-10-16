@@ -15,6 +15,10 @@
 
         .finish-wrapper {
             float: right;
+
+            button {
+                margin-left: 8px;
+            }
         }
 
         &:after {
@@ -25,35 +29,44 @@
     }
 
     .game-wrapper {
+        margin-top: 24px;
         position: relative;
 
         img {
-            width: 100%;
-            max-width: 800px;
+            width: 1140px;
         }
 
-
-        .face-new {
+        .drag-handle {
             position: absolute;
-        
-            border: 1px #FF0000 solid;
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: #ffd800;
+            cursor: nesw-resize;
+        }
+
+        .face {
+            position: absolute;
             background: transparent;
             cursor: pointer;
 
-            &.hovered {
-                background-color: rgba(255, 0, 0, 0.3);
+            &.face-new {
+                border: 1px #FF0000 solid;
+
+                &.hovered {
+                    background-color: rgba(255, 0, 0, 0.3);
+                }
             }
-        }
 
-        .face-identified {
-            position: absolute;
-        
-            border: 1px #0000FF solid;
-            background: transparent;
-            cursor: pointer;
+            &.face-identified {
+                position: absolute;
+                border: 1px #0000FF solid;
+                background: transparent;
+                cursor: pointer;
 
-            &.hovered {
-                background-color: rgba(0, 0, 255, 0.2);
+                &.hovered {
+                    background-color: rgba(0, 0, 255, 0.2);
+                }
             }
         }
     }

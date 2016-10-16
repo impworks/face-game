@@ -141,7 +141,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\fonts\" />
-    <Folder Include="Content\images\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -169,6 +168,7 @@
     <Content Include="Assets\styles\bootstrap.css" />
     <Content Include="Assets\styles\bootstrap.min.css" />
     <None Include="Assets\styles\toastr.less" />
+    <Content Include="Content\images\group.JPG" />
     <Content Include="Content\scripts\app.js" />
     <Content Include="Content\scripts\libs.js" />
     <Content Include="Content\styles\app.css" />
@@ -212,6 +212,7 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Source\Components\DragHandle.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\FaceCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\GameCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\HiscoreCpt.tsx" />

@@ -6,7 +6,7 @@
 import ComponentBase from "../Tools/ComponentBase";
 import { IGameState } from "../ViewModels/IGameState";
 
-interface IHiscoreModalProperties {
+interface IHiscoreModalProps extends React.Props<HiscoreModalCpt> {
     gameState: IGameState;
     show: boolean;
     onSave: (name: string) => void;
@@ -14,18 +14,18 @@ interface IHiscoreModalProperties {
 }
 
 interface IHiscoreModalState {
-    show: boolean;
     name: string;
 }
 
-export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProperties, IHiscoreModalState> {
+export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, IHiscoreModalState> {
 
     // -----------------------------------
     // Constructor
     // -----------------------------------
 
-    constructor() {
-        super();
+    constructor(props: IHiscoreModalProps) {
+        super(props);
+        this.state = { name: '' };
     }
 
     // -----------------------------------
@@ -33,16 +33,13 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProperti
     // -----------------------------------
 
     render(): JSX.Element {
-        if (this.state == null)
-            return null;
-
         var gs = this.props.gameState;
         var guessedFaces = gs.faces.filter(x => x.firstNameState != null).length;
 
         var isOk = !!this.state.name;
 
         return (
-            <ReactBootstrap.Modal show={this.state.show} onHide={this.props.onHide}>
+            <ReactBootstrap.Modal show={this.props.show} onHide={this.props.onHide}>
                 <form onSubmit={this.onFormSubmit.bind(this)} className="form-horizontal">
                     <ReactBootstrap.ModalHeader closeButton>
                         <ReactBootstrap.ModalTitle>Сохранение результата</ReactBootstrap.ModalTitle>
@@ -79,17 +76,6 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProperti
                 </form>
             </ReactBootstrap.Modal>
         );
-    }
-
-    private getDefaultState(): IHiscoreModalState {
-        return {
-            name: '',
-            show: false
-        };
-    }
-
-    componentWillReceiveProps(nextProps: IHiscoreModalProperties, nextContext): void {
-        this.updateState(state => state.show = nextProps.show);
     }
 
     // -----------------------------------

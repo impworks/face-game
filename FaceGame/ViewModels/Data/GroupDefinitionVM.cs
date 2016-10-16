@@ -1,9 +1,10 @@
-﻿using FaceGame.ViewModels.State;
+﻿using System.Collections.Generic;
+using FaceGame.ViewModels.State;
 
 namespace FaceGame.ViewModels.Data
 {
     public class GroupDefinitionVM
     {
-        public FaceVM[] Faces { get; set; }
+        public List<FaceVM> Faces { get; set; }
     }
 }

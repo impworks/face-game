@@ -12,7 +12,8 @@ import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
 
 interface IGameComponentState {
     gameState: IGameState;
-    isLoaded: boolean;
+    isDesignMode?: boolean;
+    isLoaded?: boolean;
     isHiscoreModalShown?: boolean;
 }
 
@@ -30,6 +31,15 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
 
     constructor() {
         super();
+
+        this.state = {
+            gameState: {
+                isFinished: false,
+                faces: [],
+                score: 0
+            },
+            isDesignMode: window.location.search === '?design'
+        };
     }
 
     // -----------------------------------
@@ -43,10 +53,6 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     // -----------------------------------
 
     render() {
-
-        if (this.state == null)
-            return null;
-
         var game = this.state.gameState;
         var faces = game.faces.map(x => <FaceCpt key={x.id} face={x} onSave={this.checkFace.bind(this)} />);
 
@@ -57,13 +63,19 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
                         Ваш счет: <strong>{game.score}</strong>
                     </div>
                     <div className="finish-wrapper">
-                        <ReactBootstrap.Button className="btn btn-primary" onClick={this.showHiscoreModal.bind(this)} disabled={this.state.gameState.score === 0}>
+                        {
+                            this.state.isDesignMode &&
+                            <ReactBootstrap.Button className="btn btn-success" onClick={this.addFace.bind(this) }>
+                                <span className="glyphicon glyphicon-plus" />
+                            </ReactBootstrap.Button>
+                        }
+                        <ReactBootstrap.Button className="btn btn-primary" onClick={this.showHiscoreModal.bind(this)} disabled={this.state.gameState.score === 0 || this.state.gameState.isFinished}>
                             Завершить
                         </ReactBootstrap.Button>
                     </div>
                 </div>
                 <div className="game-wrapper">
-                    <img src="./Assets/images/group.jpg" />
+                    <img src="./Content/images/group.jpg" />
                     {faces}
                 </div>
                 <HiscoreCpt gameState={this.state.gameState} onSave={this.addHiscore.bind(this) } onHide={this.hideHiscoreModal.bind(this) } show={this.state.isHiscoreModalShown} />
@@ -88,6 +100,8 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     }
 
     private addHiscore(name: string) {
+        this.hideHiscoreModal();
+
         $.ajax({
                 url: GameCpt.API_ROOT + 'complete',
                 method: 'POST',
@@ -98,7 +112,14 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
             .then(
                 (response: number) => {
                     toastr.success('Результат принят. Ваш ранг: #' + response);
-                    this.updateState(state => state.gameState.isFinished = true);
+                    this.updateState(state => {
+                        for (var face of state.gameState.faces) {
+                            face.firstNameState = face.firstNameState || false;
+                            face.lastNameState = face.lastNameState || false;
+                            face.middleNameState = face.middleNameState || false;
+                        }
+                        state.gameState.isFinished = true;
+                    });
                 },
                 (xhr, status) => {
                     toastr.error('Ошибка соединения с сервером');
@@ -108,29 +129,68 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     }
 
     private checkFace(face: IFaceState): JQueryPromise<IIdentificationResponse> {
-        var promise = $.ajax({
-            url: GameCpt.API_ROOT + 'identify',
-            method: 'POST',
-            data: face
-        }).then(
-            (response: IIdentificationResponse) => {
-                if (response.scoreAdded > 0) {
-                    toastr.success('Вы заработали ' + response.scoreAdded + ' очков.');
-                } else {
-                    toastr.info('Неверно.');
+        if (face.isDesignMode) {
+            return this.defineFace(face);
+        }
+
+        return $.ajax({
+                url: GameCpt.API_ROOT + 'identify',
+                method: 'POST',
+                data: face
+            })
+            .then(
+                (response: IIdentificationResponse) => {
+                    if (response.scoreAdded > 0) {
+                        toastr.success('Вы заработали ' + response.scoreAdded + ' очков.');
+                    } else {
+                        toastr.info('Неверно.');
+                    }
+
+                    this.updateState(state => state.gameState.score += response.scoreAdded);
+
+                    return response;
+                },
+                (xhr, status) => {
+                    toastr.error('Ошибка соединения с сервером');
+                    console.log('FAIL: ' + status);
                 }
+            );
+    }
 
-                this.updateState(state => state.gameState.score += response.scoreAdded);
+    private addFace() {
+        if (!this.state.isDesignMode) {
+            return;
+        }
 
-                return response;
-            },
-            (xhr, status) => {
-                toastr.error('Ошибка соединения с сервером');
-                console.log('FAIL: ' + status);
-            }
-        );
+        var newId = _(this.state.gameState.faces || []).map(x => x.id).max() + 1 || 1;
+        var face: IFaceState = {
+            id: newId,
+            x1: 10,
+            y1: 10,
+            x2: 60,
+            y2: 60,
+            hasMiddleName: true,
+            isDesignMode: true
+        };
 
-        return promise;
+        this.updateState(state => state.gameState.faces.push(face));
+    }
+
+    private defineFace(face: IFaceState): JQueryPromise<any> {
+        return $.ajax({
+                url: GameCpt.API_ROOT + 'define',
+                method: 'POST',
+                data: face
+            })
+            .then(
+                () => {
+                    toastr.success('Лицо добавлено.');
+                },
+                (xhr, status) => {
+                    toastr.error('Ошибка соединения с сервером');
+                    console.log('FAIL: ' + status);
+                }
+            );
     }
 
     // -----------------------------------
@@ -140,9 +200,9 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     componentDidMount(): void {
         this._request = $.get(GameCpt.API_ROOT + 'state',
             result => {
-                this.setState({
-                    gameState: result,
-                    isLoaded: true
+                this.updateState(state => {
+                    state.gameState = result;
+                    state.isLoaded = true;
                 });
             });
     }
@@ -151,13 +211,5 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
         if (this._request) {
             this._request.abort();
         }
-    }
-
-    private getDefaultState(): IGameState {
-        return {
-            isFinished: false,
-            faces: [],
-            score: 0
-        };
     }
 }
