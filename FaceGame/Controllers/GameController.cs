@@ -67,7 +67,7 @@ namespace FaceGame.Controllers
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             _stateManager.FinishGame(State);
-            var rank = _hiscoreManager.AddHiscore(vm.Name, State.Score);
+            var rank = _hiscoreManager.AddHiscore(State, vm.Name);
 
             return rank;
         }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using FaceGame.ViewModels.Data;
+using FaceGame.ViewModels.State;
 using Newtonsoft.Json;
 
 namespace FaceGame.Code
@@ -22,19 +23,21 @@ namespace FaceGame.Code
         /// Adds a hiscore to the table.
         /// Returns the new player's rank.
         /// </summary>
-        public int AddHiscore(string name, int value)
+        public int AddHiscore(StateVM state, string name)
         {
             var record = new HiscoreVM
             {
                 Name = name,
-                Score = value,
-                Date = DateTime.Now
+                Id = state.Id,
+                Score = state.Score,
+                Start = state.Start,
+                End = DateTime.Now
             };
 
             Hiscores.Scores = Hiscores.Scores
                                       .Concat(new[] {record})
                                       .OrderByDescending(x => x.Score)
-                                      .ThenBy(x => x.Date)
+                                      .ThenBy(x => x.End)
                                       .Take(MAX_SCORES)
                                       .ToArray();
 

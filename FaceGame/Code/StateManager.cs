@@ -6,6 +6,7 @@ using FaceGame.ViewModels.Data;
 using FaceGame.ViewModels.Messages;
 using FaceGame.ViewModels.State;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FaceGame.Code
 {
@@ -14,7 +15,8 @@ namespace FaceGame.Code
     /// </summary>
     public class StateManager
     {
-        private const string FILE_PATH = "~/Content/group.json";
+        private const string DEFINITION_PATH = "~/Content/group.json";
+        private const string LOG_PATH = "~/Content/logs/actions.{0}.json";
 
         public const int FIRST_NAME_SCORE = 10;
         public const int LAST_NAME_SCORE = 5;
@@ -32,7 +34,7 @@ namespace FaceGame.Code
         {
             return new StateVM
             {
-                Score = 0,
+                Id = Guid.NewGuid().ToString().Substring(0, 8),
                 Faces = Group.Faces.Select(x => x.CreateBlankCopy()).ToArray()
             };
         }
@@ -73,6 +75,8 @@ namespace FaceGame.Code
             face.LastNameState = result.IsLastNameCorrect;
             face.MiddleNameState = result.IsMiddleNameCorrect;
 
+            LogIdentification(state, ident);
+
             return result;
         }
 
@@ -87,8 +91,8 @@ namespace FaceGame.Code
 
             Group.Faces.Add(face);
 
-            var data = JsonConvert.SerializeObject(Group);
-            File.WriteAllText(HttpContext.Current.Server.MapPath(FILE_PATH), data);
+            var data = JsonConvert.SerializeObject(Group, Formatting.Indented);
+            File.WriteAllText(HttpContext.Current.Server.MapPath(DEFINITION_PATH), data);
         }
 
         /// <summary>
@@ -127,7 +131,7 @@ namespace FaceGame.Code
         /// </summary>
         private static GroupDefinitionVM LoadGroupDefinition()
         {
-            var path = HttpContext.Current.Server.MapPath(FILE_PATH);
+            var path = HttpContext.Current.Server.MapPath(DEFINITION_PATH);
             var data = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<GroupDefinitionVM>(data);
         }
@@ -147,6 +151,33 @@ namespace FaceGame.Code
         {
             opt = Clean(opt);
             return Clean(def).Split(',').Any(x => x == opt);
+        }
+
+        /// <summary>
+        /// Logs the identification to current user's action log.
+        /// </summary>
+        private static void LogIdentification(StateVM state, IdentificationVM vm)
+        {
+            var filePath = HttpContext.Current.Server.MapPath(string.Format(LOG_PATH, state.Id));
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+            var array = new JArray();
+            if (File.Exists(filePath))
+            {
+                var rawData = File.ReadAllText(filePath);
+                array = JArray.Parse(rawData);
+            }
+
+            var data = JObject.FromObject(new IdentificationLogVM
+            {
+                Date = DateTime.Now,
+                IP = HttpContext.Current.Request.UserHostAddress,
+                Content = vm
+            });
+
+            array.Add(data);
+
+            File.WriteAllText(filePath, array.ToString(Formatting.Indented));
         }
 
         #endregion
