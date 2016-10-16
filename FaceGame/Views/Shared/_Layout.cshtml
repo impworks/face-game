@@ -11,11 +11,16 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+                <a href="@Url.Action("Game", "Home")" class="navbar-brand">
                     <span class="glyphicon glyphicon-user"></span> Игра
                 </a>
             </div>
             <ul class="nav navbar-nav">
+                <li>
+                    <a href="@Url.Action("Rules", "Home")">
+                        <span class="glyphicon glyphicon-th-list"></span> Правила
+                    </a>
+                </li>
                 <li>
                     <a href="@Url.Action("Hiscores", "Home")">
                         <span class="glyphicon glyphicon-th-list"></span> Результаты

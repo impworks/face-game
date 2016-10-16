@@ -16,9 +16,9 @@ namespace FaceGame.Code
     {
         private const string FILE_PATH = "~/Content/group.json";
 
-        private const int FIRST_NAME_SCORE = 5;
-        private const int LAST_NAME_SCORE = 5;
-        private const int MIDDLE_NAME_SCORE = 20;
+        public const int FIRST_NAME_SCORE = 10;
+        public const int LAST_NAME_SCORE = 5;
+        public const int MIDDLE_NAME_SCORE = 30;
 
         private static GroupDefinitionVM _group;
         private static GroupDefinitionVM Group => _group ?? (_group = LoadGroupDefinition());

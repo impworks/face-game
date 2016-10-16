@@ -16,9 +16,17 @@ namespace FaceGame.Controllers
         private readonly HiscoreManager _hiscoreMgr;
 
         /// <summary>
+        /// Displays the rules.
+        /// </summary>
+        public ActionResult Rules()
+        {
+            return View();
+        }
+
+        /// <summary>
         /// Displays the main game screen.
         /// </summary>
-        public ActionResult Index()
+        public ActionResult Game()
         {
             return View();
         }

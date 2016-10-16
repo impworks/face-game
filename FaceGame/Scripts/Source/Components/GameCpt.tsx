@@ -60,7 +60,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
             <div className="content-wrapper">
                 <div className="content-header">
                     <div className="score-wrapper">
-                        Ваш счет: <strong>{game.score}</strong>
+                        Счет: <strong>{game.score}</strong> очков
                     </div>
                     <div className="finish-wrapper">
                         {
@@ -75,7 +75,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
                     </div>
                 </div>
                 <div className="game-wrapper">
-                    <img src="./Content/images/group.jpg" />
+                    <img src="/Content/images/group.jpg" />
                     {faces}
                 </div>
                 <HiscoreCpt gameState={this.state.gameState} onSave={this.addHiscore.bind(this) } onHide={this.hideHiscoreModal.bind(this) } show={this.state.isHiscoreModalShown} />
