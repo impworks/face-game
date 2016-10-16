@@ -51,7 +51,8 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
             width: this.state.face.width,
             height: this.state.face.height
         };
-        var blockClasses = `face ${this.state.isHovered ? 'hovered' : ''}`;
+
+        var blockClasses = this.getOverlayClasses();
         var popover = this.renderPopover();
 
         return (
@@ -93,6 +94,17 @@ export default class FaceCpt extends ComponentBase<IFaceCptProperties, IFaceInte
                 }
             </form>
         </ReactBootstrap.Popover>;
+    }
+
+    private getOverlayClasses(): string {
+        var detected = this.props.face.firstNameState;
+        var isHovered = this.state.isHovered;
+        var classes = [
+            detected == null ? 'face-new' : 'face-identified',
+            isHovered ? 'hovered' : ''
+        ];
+
+        return classes.join(' ');
     }
 
     // -----------------------------------

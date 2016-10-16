@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Net;
+using System.Web;
 using System.Web.Http;
 using FaceGame.Code;
 using FaceGame.ViewModels.Messages;
@@ -48,7 +49,7 @@ namespace FaceGame.Controllers
         public IdentificationResponseVM Identify(IdentificationVM request)
         {
             if (State == null)
-                return null;
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             return _stateManager.Identificate(State, request);
         }
@@ -58,17 +59,15 @@ namespace FaceGame.Controllers
         /// </summary>
         [Route("complete")]
         [HttpPost]
-        public int Complete(string name)
+        public int Complete(CompletionVM vm)
         {
-            if (State == null || State.Score == 0)
-                return 0;
+            if (State == null || State.Score == 0 || State.IsFinished || string.IsNullOrEmpty(vm.Name))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var score = State.Score;
-            State = null;
+            State.IsFinished = true;
+            var rank = _hiscoreManager.AddHiscore(vm.Name, State.Score);
 
-            _hiscoreManager.AddHiscore(name, score);
-
-            return score;
+            return rank;
         }
     }
 }

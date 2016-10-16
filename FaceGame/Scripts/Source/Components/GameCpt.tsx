@@ -5,6 +5,7 @@
 
 import ComponentBase from "../Tools/ComponentBase";
 import FaceCpt from "./FaceCpt";
+import HiscoreCpt from "./HiscoreCpt";
 import { IGameState } from "../ViewModels/IGameState";
 import { IFaceState } from "../ViewModels/IFaceState";
 import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
@@ -12,6 +13,7 @@ import { IIdentificationResponse } from "../ViewModels/IIdentificationResponse";
 interface IGameComponentState {
     gameState: IGameState;
     isLoaded: boolean;
+    isHiscoreModalShown?: boolean;
 }
 
 export default class GameCpt extends ComponentBase<any, IGameComponentState> {
@@ -55,7 +57,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
                         Ваш счет: <strong>{game.score}</strong>
                     </div>
                     <div className="finish-wrapper">
-                        <ReactBootstrap.Button className="btn btn-primary" onClick={this.finishGame}>
+                        <ReactBootstrap.Button className="btn btn-primary" onClick={this.showHiscoreModal.bind(this)} disabled={this.state.gameState.score === 0}>
                             Завершить
                         </ReactBootstrap.Button>
                     </div>
@@ -64,6 +66,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
                     <img src="./Assets/images/group.jpg" />
                     {faces}
                 </div>
+                <HiscoreCpt gameState={this.state.gameState} onSave={this.addHiscore.bind(this) } onHide={this.hideHiscoreModal.bind(this) } show={this.state.isHiscoreModalShown} />
             </div>
         );
     }
@@ -72,15 +75,43 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     // Handlers
     // -----------------------------------
 
-    private finishGame() {
-        console.log('finished?');
+    private showHiscoreModal() {
+        if (this.state.gameState.isFinished) {
+            return false;
+        }
+
+        this.updateState(state => state.isHiscoreModalShown = true);
+    }
+
+    private hideHiscoreModal() {
+        this.updateState(state => state.isHiscoreModalShown = false);
+    }
+
+    private addHiscore(name: string) {
+        $.ajax({
+                url: GameCpt.API_ROOT + 'complete',
+                method: 'POST',
+                data: {
+                    name: name
+                }
+            })
+            .then(
+                (response: number) => {
+                    toastr.success('Результат принят. Ваш ранг: #' + response);
+                    this.updateState(state => state.gameState.isFinished = true);
+                },
+                (xhr, status) => {
+                    toastr.error('Ошибка соединения с сервером');
+                    console.log('FAIL: ' + status);
+                }
+            );
     }
 
     private checkFace(face: IFaceState): JQueryPromise<IIdentificationResponse> {
         var promise = $.ajax({
             url: GameCpt.API_ROOT + 'identify',
-            data: face,
-            method: 'POST'
+            method: 'POST',
+            data: face
         }).then(
             (response: IIdentificationResponse) => {
                 if (response.scoreAdded > 0) {

@@ -20,8 +20,9 @@ namespace FaceGame.Code
 
         /// <summary>
         /// Adds a hiscore to the table.
+        /// Returns the new player's rank.
         /// </summary>
-        public void AddHiscore(string name, int value)
+        public int AddHiscore(string name, int value)
         {
             var record = new HiscoreVM
             {
@@ -38,6 +39,8 @@ namespace FaceGame.Code
                                       .ToArray();
 
             SaveHiscores();
+
+            return Array.IndexOf(Hiscores.Scores, record) + 1;
         }
 
         /// <summary>

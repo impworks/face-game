@@ -7,5 +7,6 @@
     {
         public FaceVM[] Faces { get; set; }
         public int Score { get; set; }
+        public bool IsFinished { get; set; }
     }
 }

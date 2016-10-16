@@ -157,6 +157,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Data\GroupDefinitionVM.cs" />
+    <Compile Include="ViewModels\Messages\CompletionVM.cs" />
     <Compile Include="ViewModels\Messages\IdentificationResponseVM.cs" />
     <Compile Include="ViewModels\State\FaceVM.cs" />
     <Compile Include="ViewModels\Data\HiscoreListVM.cs" />
@@ -213,6 +214,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\Source\Components\FaceCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\GameCpt.tsx" />
+    <TypeScriptCompile Include="Scripts\Source\Components\HiscoreCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Components\TextInputCpt.tsx" />
     <TypeScriptCompile Include="Scripts\Source\Tools\ComponentBase.ts" />
     <TypeScriptCompile Include="Scripts\Source\ViewModels\IFaceState.ts" />
