@@ -13,11 +13,7 @@ interface IHiscoreModalProps extends React.Props<HiscoreModalCpt> {
     onHide: () => void;
 }
 
-interface IHiscoreModalState {
-    name: string;
-}
-
-export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, IHiscoreModalState> {
+export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, { }> {
 
     // -----------------------------------
     // Constructor
@@ -25,7 +21,6 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, I
 
     constructor(props: IHiscoreModalProps) {
         super(props);
-        this.state = { name: '' };
     }
 
     // -----------------------------------
@@ -36,8 +31,6 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, I
         var gs = this.props.gameState;
         var guessedFaces = gs.faces.filter(x => x.firstNameState != null).length;
 
-        var isOk = !!this.state.name;
-
         return (
             <ReactBootstrap.Modal show={this.props.show} onHide={this.props.onHide}>
                 <form onSubmit={this.onFormSubmit.bind(this)} className="form-horizontal">
@@ -45,6 +38,12 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, I
                         <ReactBootstrap.ModalTitle>Сохранение результата</ReactBootstrap.ModalTitle>
                     </ReactBootstrap.ModalHeader>
                     <ReactBootstrap.ModalBody>
+                        <div className="form-group">
+                            <label className="col-sm-4 control-label">Ваше имя</label>
+                            <div className="col-sm-8">
+                                <input type="text" className="form-control" value={gs.name} disabled={true} />
+                            </div>
+                        </div>
                         <div className="form-group">
                             <label className="col-sm-4 control-label">Отвечено</label>
                             <div className="col-sm-8">
@@ -61,16 +60,10 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, I
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group">
-                            <label className="col-sm-4 control-label">Ваше имя</label>
-                            <div className="col-sm-8">
-                                <input type="text" className="form-control" value={this.state.name} onChange={this.onInputChange.bind(this)} />
-                            </div>
-                        </div>
                     </ReactBootstrap.ModalBody>
                     <ReactBootstrap.ModalFooter>
-                        <ReactBootstrap.Button type="submit" className="btn btn-primary" disabled={!isOk}>
-                            Сохранить
+                        <ReactBootstrap.Button type="submit" className="btn btn-primary">
+                            Завершить
                         </ReactBootstrap.Button>
                     </ReactBootstrap.ModalFooter>
                 </form>
@@ -82,18 +75,8 @@ export default class HiscoreModalCpt extends ComponentBase<IHiscoreModalProps, I
     // Handlers
     // -----------------------------------
 
-    private onInputChange(e: React.SyntheticEvent) {
-        var value = (e.target as HTMLInputElement).value;
-
-        this.updateState(x => x.name = value);
-    }
-
     private onFormSubmit(e: React.SyntheticEvent) {
-        var name = this.state.name;
-        if (name) {
-            this.props.onSave(name);
-        }
-
+        this.props.onSave(name);
         e.preventDefault();
     }
 }

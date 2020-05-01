@@ -1,27 +1,30 @@
 ﻿@model FaceGame.ViewModels.Data.HiscoreListVM
 @{
     ViewBag.Title = "Результаты";
+    var rank = 1;
 }
 
 <h3>Список результатов</h3>
 
-@if (Model.Scores.Any())
+@if (Model.Plays.Any())
 {
     <table class="table table-striped table-bordered">
         <thead>
-        <tr>
-            <td width="10%">Очков</td>
-            <td width="60%">Имя</td>
-            <td width="30%">Дата</td>
-        </tr>
+            <tr>
+                <td width="10%">Место</td>
+                <td width="10%">Очков</td>
+                <td width="60%">Имя</td>
+                <td width="30%">Дата завершения</td>
+            </tr>
         </thead>
         <tbody>
-            @foreach (var record in Model.Scores)
+            @foreach (var record in Model.Plays.OrderByDescending(x => x.Score))
             {
                 <tr>
+                    <td><b>@(rank++)</b></td>
                     <td>@record.Score</td>
                     <td>@record.Name</td>
-                    <td>@record.Date.ToShortDateString()</td>
+                    <td>@(record.End == null ? "Еще играет" : record.End.Value.ToShortDateString())</td>
                 </tr>
             }
         </tbody>

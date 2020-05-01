@@ -12,7 +12,6 @@ namespace FaceGame
             container.RegisterControllers();
             container.RegisterApiControllers();
 
-            container.Register<HiscoreManager>(new PerRequestLifeTime());
             container.Register<StateManager>(new PerRequestLifeTime());
 
             container.EnablePerWebRequestScope();

@@ -254,3 +254,6 @@ paket-files/
 FaceGame/Content/styles/
 FaceGame/Content/fonts/
 FaceGame/Content/scripts/
+FaceGame/Content/logs/
+FaceGame/Content/hiscores.json
+FaceGame/Content/states.json

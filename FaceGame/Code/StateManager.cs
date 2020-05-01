@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,7 @@ namespace FaceGame.Code
     public class StateManager
     {
         private const string DEFINITION_PATH = "~/Content/group.json";
+        private const string STATES_PATH = "~/Content/states.json";
         private const string LOG_PATH = "~/Content/logs/actions.{0}.json";
 
         public const int FIRST_NAME_SCORE = 10;
@@ -25,25 +27,39 @@ namespace FaceGame.Code
         private static GroupDefinitionVM _group;
         private static GroupDefinitionVM Group => _group ?? (_group = LoadGroupDefinition());
 
+        private static List<StateVM> _states;
+        private static List<StateVM> States => _states ?? (_states = LoadStates());
+
         #region Public methods
 
         /// <summary>
         /// Creates a new state for a new player.
         /// </summary>
-        public StateVM CreateNewState()
+        public StateVM CreateNewState(string name)
         {
-            return new StateVM
+            var state = new StateVM
             {
                 Id = Guid.NewGuid().ToString().Substring(0, 8),
+                Name = name,
+                Start =  DateTime.Now,
                 Faces = Group.Faces.Select(x => x.CreateBlankCopy()).ToArray()
             };
+
+            States.Add(state);
+            SaveStates(States);
+
+            return state;
         }
 
         /// <summary>
         /// Validates an identification attempt.
         /// </summary>
-        public IdentificationResponseVM Identificate(StateVM state, IdentificationVM ident)
+        public IdentificationResponseVM Identify(string sid, IdentificationVM ident)
         {
+            var state = States.FirstOrDefault(x => x.Id == sid);
+            if(state == null)
+                throw new Exception("State not found.");
+
             var face = state.Faces.FirstOrDefault(x => x.Id == ident.Id);
             if(face == null)
                 throw new ArgumentException("Face not found!");
@@ -76,6 +92,8 @@ namespace FaceGame.Code
             face.MiddleNameState = result.IsMiddleNameCorrect;
 
             LogIdentification(state, ident);
+
+            SaveStates(States);
 
             return result;
         }
@@ -110,9 +128,11 @@ namespace FaceGame.Code
         /// <summary>
         /// Marks the game as finished.
         /// </summary>
-        public void FinishGame(StateVM state)
+        public int FinishGame(StateVM state)
         {
             state.IsFinished = true;
+            state.End = DateTime.Now;
+
             foreach (var face in state.Faces)
             {
                 face.FirstNameState = face.FirstNameState ?? false;
@@ -120,6 +140,21 @@ namespace FaceGame.Code
                 if (face.HasMiddleName)
                     face.MiddleNameState = face.MiddleNameState ?? false;
             }
+
+            SaveStates(States);
+
+            return States.OrderByDescending(x => x.Score)
+                         .Select((x, idx) => new {Id = x.Id, Rank = idx + 1})
+                         .First(x => x.Id == state.Id)
+                         .Rank;
+        }
+
+        /// <summary>
+        /// Returns the list of all states.
+        /// </summary>
+        public IReadOnlyList<StateVM> GetAllStates()
+        {
+            return States;
         }
 
         #endregion
@@ -134,6 +169,29 @@ namespace FaceGame.Code
             var path = HttpContext.Current.Server.MapPath(DEFINITION_PATH);
             var data = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<GroupDefinitionVM>(data);
+        }
+
+        /// <summary>
+        /// Loads known states.
+        /// </summary>
+        private static List<StateVM> LoadStates()
+        {
+            var path = HttpContext.Current.Server.MapPath(STATES_PATH);
+            if(!File.Exists(path))
+                return new List<StateVM>();
+
+            var data = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<List<StateVM>>(data);
+        }
+
+        /// <summary>
+        /// Saves states to disk.
+        /// </summary>
+        private static void SaveStates(List<StateVM> states)
+        {
+            var path = HttpContext.Current.Server.MapPath(STATES_PATH);
+            var data = JsonConvert.SerializeObject(states, Formatting.Indented);
+            File.WriteAllText(path, data);
         }
 
         /// <summary>

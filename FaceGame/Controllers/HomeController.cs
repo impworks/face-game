@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using FaceGame.Code;
+using FaceGame.ViewModels.Data;
 
 namespace FaceGame.Controllers
 {
@@ -8,12 +9,12 @@ namespace FaceGame.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        public HomeController(HiscoreManager hiscoreMgr)
+        public HomeController(StateManager stateMgr)
         {
-            _hiscoreMgr = hiscoreMgr;
+            _stateMgr = stateMgr;
         }
 
-        private readonly HiscoreManager _hiscoreMgr;
+        private readonly StateManager _stateMgr;
 
         /// <summary>
         /// Displays the rules.
@@ -36,8 +37,8 @@ namespace FaceGame.Controllers
         /// </summary>
         public ActionResult Hiscores()
         {
-            var scores = _hiscoreMgr.Hiscores;
-            return View(scores);
+            var states = _stateMgr.GetAllStates();
+            return View(new HiscoreListVM { Plays = states });
         }
     }
 }

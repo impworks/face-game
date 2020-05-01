@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 using FaceGame.Code;
@@ -13,30 +14,37 @@ namespace FaceGame.Controllers
     [RoutePrefix("api")]
     public class GameController: ApiController
     {
-        public GameController(HiscoreManager hiscoreMgr, StateManager stateMgr)
+        public GameController(StateManager stateMgr)
         {
-            _hiscoreManager = hiscoreMgr;
             _stateManager = stateMgr;
         }
 
-        private readonly HiscoreManager _hiscoreManager;
         private readonly StateManager _stateManager;
 
         private StateVM State
         {
             get { return HttpContext.Current.Session[nameof(StateVM)] as StateVM; }
             set { HttpContext.Current.Session[nameof(StateVM)] = value; }
-        } 
+        }
 
         /// <summary>
-        /// Requests current state or creates a new one.
+        /// Creates new state.
+        /// </summary>
+        [HttpPost, Route("play")]
+        public StateVM Play(PlayVM request)
+        {
+            return State = _stateManager.CreateNewState(request.Name);
+        }
+
+        /// <summary>
+        /// Requests current state.
         /// </summary>
         [Route("state")]
         [HttpGet]
         public StateVM GetState()
         {
             if (State == null)
-                State = _stateManager.CreateNewState();
+                throw new Exception("No state");
 
             _stateManager.PatchState(State);
 
@@ -53,7 +61,7 @@ namespace FaceGame.Controllers
             if (State == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return _stateManager.Identificate(State, request);
+            return _stateManager.Identify(State.Id, request);
         }
 
         /// <summary>
@@ -61,14 +69,13 @@ namespace FaceGame.Controllers
         /// </summary>
         [Route("complete")]
         [HttpPost]
-        public int Complete(CompletionVM vm)
+        public int Complete(PlayVM vm)
         {
             if (State == null || State.Score == 0 || State.IsFinished || string.IsNullOrEmpty(vm.Name))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            _stateManager.FinishGame(State);
-            var rank = _hiscoreManager.AddHiscore(State, vm.Name);
-
+            var rank = _stateManager.FinishGame(State);
+            State = null;
             return rank;
         }
 

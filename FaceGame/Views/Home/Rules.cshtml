@@ -6,7 +6,7 @@
 <div class="jumbotron">
     <h1>Вспомни сокурсников</h1>
     <p>Эти люди провели с тобой почти пять лет в стенах родной кафедры. Скольких из них ты все еще помнишь по имени?</p>
-    <p><a href="@Url.Action("Game")" class="btn btn-primary btn-lg">Давай сыграем</a></p>
+    <p id="game-button"></p>
 </div>
 
 <div class="row">
@@ -16,7 +16,7 @@
         <p>На игровом поле отмечены лица бывших студентов.</p>
         <p>При нажатии на любого из них можно ввести имя, фамилию, а у некоторых - даже отчество.</p>
         <p>После ввода жми "Сохранить", чтобы проверить свою догадку.</p>
-        <p>На каждое лицо дается <b>только одна попытка</b>! Если поле оставлено пустым - шанс упущен.</p>  
+        <p>На каждое лицо дается <b>только одна попытка</b>! Если поле оставлено пустым - шанс упущен.</p>
     </div>
     <div class="col-sm-4">
         <h3>Как начисляются очки?</h3>
@@ -32,3 +32,15 @@
         <p>Если я правильно помни, и моя память не спит с другим... А если всё же нет - пиши в Телеграм: <code>@@impworks</code></p>
     </div>
 </div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Content/scripts/app.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        require(["Components/PlayButtonCpt"], function (main) {
+            ReactDOM.render(
+                React.createElement(main.default),
+                document.getElementById('game-button')
+            );
+        });
+    </script>
+}

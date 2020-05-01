@@ -23,7 +23,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     // Constants
     // -----------------------------------
 
-    static API_ROOT = "/api/";
+    public static API_ROOT = "/api/";
 
     // -----------------------------------
     // Constructor
@@ -34,6 +34,7 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
 
         this.state = {
             gameState: {
+                name: '',
                 isFinished: false,
                 faces: [],
                 score: 0
@@ -198,13 +199,19 @@ export default class GameCpt extends ComponentBase<any, IGameComponentState> {
     // -----------------------------------
 
     componentDidMount(): void {
-        this._request = $.get(GameCpt.API_ROOT + 'state',
+        this._request = $.get(GameCpt.API_ROOT + 'state');
+        this._request.then(
             result => {
                 this.updateState(state => {
                     state.gameState = result;
                     state.isLoaded = true;
                 });
-            });
+            },
+            () => {
+                // redirect to root if no session is found
+                location.href = '/';
+            }
+        );
     }
 
     componentWillUnmount(): void {

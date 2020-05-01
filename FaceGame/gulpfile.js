@@ -58,7 +58,8 @@ gulp.task('app:less', function () {
 
 gulp.task('app:scripts', function () {
     return gulp.src([
-            './Scripts/Source/Components/GameCpt.tsx'
+        './Scripts/Source/Components/GameCpt.tsx',
+        './Scripts/Source/Components/PlayButtonCpt.tsx'
     ])
         .pipe(tsc(tsProject))
         .pipe(gulp.dest('./Content/scripts/'));

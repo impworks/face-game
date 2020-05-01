@@ -1,7 +1,10 @@
-﻿namespace FaceGame.ViewModels.Data
+﻿using System.Collections.Generic;
+using FaceGame.ViewModels.State;
+
+namespace FaceGame.ViewModels.Data
 {
     public class HiscoreListVM
     {
-        public HiscoreVM[] Scores { get; set; }
+        public IReadOnlyList<StateVM> Plays { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FaceGame.ViewModels.Messages
 {
-    public class CompletionVM
+    public class PlayVM
     {
         public string Name { get; set; }
     }
