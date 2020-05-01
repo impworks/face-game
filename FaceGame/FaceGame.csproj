@@ -161,7 +161,7 @@
     <Compile Include="ViewModels\Messages\PlayVM.cs" />
     <Compile Include="ViewModels\Messages\IdentificationResponseVM.cs" />
     <Compile Include="ViewModels\State\FaceVM.cs" />
-    <Compile Include="ViewModels\Data\HiscoreListVM.cs" />
+    <Compile Include="ViewModels\Data\ScoreListVM.cs" />
     <Compile Include="ViewModels\Messages\IdentificationVM.cs" />
     <Compile Include="ViewModels\State\StateVM.cs" />
   </ItemGroup>
@@ -205,10 +205,10 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Properties\PublishProfiles\it6.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Hiscores.cshtml" />
+    <Content Include="Views\Home\Scores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\fonts\glyphicons-halflings-regular.woff" />

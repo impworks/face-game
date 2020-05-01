@@ -69,9 +69,9 @@ namespace FaceGame.Controllers
         /// </summary>
         [Route("complete")]
         [HttpPost]
-        public int Complete(PlayVM vm)
+        public int Complete()
         {
-            if (State == null || State.Score == 0 || State.IsFinished || string.IsNullOrEmpty(vm.Name))
+            if (State == null || State.Score == 0 || State.IsFinished)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var rank = _stateManager.FinishGame(State);

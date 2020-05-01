@@ -3,7 +3,7 @@ using FaceGame.ViewModels.State;
 
 namespace FaceGame.ViewModels.Data
 {
-    public class HiscoreListVM
+    public class ScoreListVM
     {
         public IReadOnlyList<StateVM> Plays { get; set; }
     }
